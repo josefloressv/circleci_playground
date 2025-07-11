@@ -55,14 +55,27 @@ workflows:
       - test:
           requires:
             - build
-      - hold_for_approval:
+      - deploy:
+          name: deploy_to_dev
+          environment: DEV
+      - deploy_staging_approval:
           type: approval
           requires:
-            - test
+            - deploy_to_dev
       - deploy:
-          environment: DEV
+          name: deploy_to_staging
+          environment: STAGING
           requires:
-            - hold_for_approval
+            - deploy_staging_approval
+      - deploy_prod_approval:
+          type: approval
+          requires:
+            - deploy_to_staging
+      - deploy:
+          name: deploy_to_prod
+          environment: PROD
+          requires:
+            - deploy_prod_approval
   build2:
     when: << pipeline.parameters.run_build_2 >>
     jobs:
