@@ -5,39 +5,60 @@ parameters:
     type: boolean
     default: false
 
+executors:
+  base:
+    docker:
+        - image: cimg/base:2025.06
+  php:
+    docker:
+      - image: cimg/php:7
+
 jobs:
   build:
-    docker:
-      - image: cimg/base:2025.06
+    executor: base
     steps:
       - checkout
       - run:
           name: Check OS info
           command: cat /etc/os-release
   build2:
-    docker:
-      - image: cimg/base:2025.06
+    executor: php
     steps:
       - checkout
       - run:
           name: Check OS info
           command: cat /etc/os-release
   test:
-    docker:
-      - image: cimg/base:2025.06
+    executor: base
     steps:
       - checkout
       - run:
           name: OS info
           command: cat /etc/os-release
+  deploy:
+    executor: php
+    steps:
+      - checkout
+      - run: php --version
+      - run:
+          name: environment
+          command: |
+            echo "Environment: $ENV"
 
 workflows:
-  build_and_test:
+  build_test_and_deploy:
     jobs:
       - build
       - test:
           requires:
             - build
+      - hold_for_approval:
+          type: approval
+          requires:
+            - test
+      - deploy:
+          requires:
+            - hold_for_approval
   build2:
     when: << pipeline.parameters.run_build_2 >>
     jobs:
