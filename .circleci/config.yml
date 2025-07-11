@@ -1,6 +1,20 @@
 version: 2.1
+
+parameters:
+  run_build_2:
+    type: boolean
+    default: false
+
 jobs:
   build:
+    docker:
+      - image: cimg/base:2025.06
+    steps:
+      - checkout
+      - run:
+          name: Check OS info
+          command: cat /etc/os-release
+  build2:
     docker:
       - image: cimg/base:2025.06
     steps:
@@ -24,5 +38,7 @@ workflows:
       - test:
           requires:
             - build
-
-  
+  build2:
+    when: << pipeline.parameters.run_build_2 >>
+    jobs:
+      - build2
