@@ -62,7 +62,8 @@ workflows:
       - deploy:
           requires:
             - hold_for_approval
-          environment: DEV
+          parameters:
+            environment: DEV
   build2:
     when: << pipeline.parameters.run_build_2 >>
     jobs:
