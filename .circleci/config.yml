@@ -37,15 +37,16 @@ jobs:
           command: cat /etc/os-release
   deploy:
     executor: php
-    environment:
-      ENV: $ENVIRONMENT
+    parameters:
+      environment:
+        type: env_var_name
     steps:
       - checkout
       - run: php --version
       - run:
           name: environment
           command: |
-            echo "Environment: $ENV"
+            echo "Environment: ${<< parameters.environment >>}"
 
 workflows:
   build_test_and_deploy:
@@ -61,6 +62,7 @@ workflows:
       - deploy:
           requires:
             - hold_for_approval
+          environment: DEV
   build2:
     when: << pipeline.parameters.run_build_2 >>
     jobs:
