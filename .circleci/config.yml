@@ -1,0 +1,28 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: cimg/base:2025.06
+    steps:
+      - checkout
+      - run:
+          name: Check OS info
+          command: cat /etc/os-release
+  test:
+    docker:
+      - image: cimg/base:2025.06
+    steps:
+      - checkout
+      - run:
+          name: OS info
+          command: cat /etc/os-release
+
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+
+  
