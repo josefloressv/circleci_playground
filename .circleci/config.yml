@@ -44,7 +44,7 @@ jobs:
       - checkout
       - run: php --version
       - run:
-          name: environment
+          name: Environment Check
           command: |
             echo "Environment: ${<< parameters.environment >>}"
 
@@ -60,10 +60,9 @@ workflows:
           requires:
             - test
       - deploy:
+          environment: DEV
           requires:
             - hold_for_approval
-          parameters:
-            environment: DEV
   build2:
     when: << pipeline.parameters.run_build_2 >>
     jobs:
