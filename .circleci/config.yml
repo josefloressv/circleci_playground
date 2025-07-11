@@ -58,6 +58,8 @@ workflows:
       - deploy:
           name: deploy_to_dev
           environment: DEV
+          requires:
+            - test
       - deploy_staging_approval:
           type: approval
           requires:
