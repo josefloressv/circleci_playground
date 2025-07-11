@@ -11,7 +11,7 @@ executors:
         - image: cimg/base:2025.06
   php:
     docker:
-      - image: cimg/php:7
+      - image: cimg/php:7.4
 
 jobs:
   build:
@@ -37,6 +37,8 @@ jobs:
           command: cat /etc/os-release
   deploy:
     executor: php
+    environment:
+      ENV: $ENVIRONMENT
     steps:
       - checkout
       - run: php --version
