@@ -46,7 +46,7 @@ jobs:
       - run:
           name: Environment Check
           command: |
-            echo "Environment: ${<< parameters.environment >>}"
+            echo "Environment: << parameters.environment >>"
 
 workflows:
   build_test_and_deploy:
