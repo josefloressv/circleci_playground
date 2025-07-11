@@ -39,7 +39,7 @@ jobs:
     executor: php
     parameters:
       environment:
-        type: env_var_name
+        type: string
     steps:
       - checkout
       - run: php --version
